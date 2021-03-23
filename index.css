@@ -1,0 +1,19 @@
+div.restaurants {
+    background-color: #4682B4;
+    overflow: auto;
+    white-space: nowrap;
+    border-radius: 5px;
+  }
+  
+  div.restaurants a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+    border: white
+  }
+  
+  div.restaurants a:hover {
+    background-color: #777;
+  }
