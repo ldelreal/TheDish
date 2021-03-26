@@ -5,11 +5,6 @@ firebase.auth().onAuthStateChanged(async function (user) {
     // Signed in
     console.log('signed in')
 
-    // // display username for current user
-    // document.querySelector('.sign-in-or-sign-out').innerHTML = `
-    // <button class="text-grey-500 underline sign-out">Sign Out</button>
-    // `
-
     // Sign-out button
     document.querySelector('.sign-out').innerHTML = `
       <button class="top-0 right-0 text-white bg-blue-800 bg-opacity-50 rounded px-2 py-1 sign-out">Sign Out</button>
@@ -196,7 +191,7 @@ async function renderRestaurant(restaurant) {
 async function renderPost(dish) {
   let dishId = dish.id
   document.querySelector('.dishes').insertAdjacentHTML('beforeend', `
-    <div class="dish-${dishId} md:mt-16 mt-8 space-y-4 rounded-lg p-4 border-solid border-8 border-gray-400">
+    <div class="dish-${dishId} md:mt-16 mt-8 space-y-4 rounded-lg p-4 border-solid border-8 border-gray-400 ">
       <div class="flex md:mx-4 mx-2">
         <span class="w-1/4 text-left font-light text-lg">${dish.restaurant}</span>
         <span class="w-1/2 text-center font-bold text-lg underline">${dish.dish}</span>
