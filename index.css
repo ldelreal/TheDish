@@ -1,6 +1,6 @@
 div.restaurants {
     background-color: #4682B4;
-    overflow: auto;
+    overflow: visible;
     white-space: nowrap;
     border-radius: 5px;
   }

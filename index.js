@@ -1,6 +1,6 @@
 let db = firebase.firestore()
 
-firebase.auth().onAuthStateChanged(async function(user) {
+firebase.auth().onAuthStateChanged(async function (user) {
   if (user) {
     // Signed in
     console.log('signed in')
@@ -14,7 +14,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
     document.querySelector('.sign-out').innerHTML = `
       <button class="top-0 right-0 text-white bg-blue-800 bg-opacity-50 rounded px-2 py-1 sign-out">Sign Out</button>
     `
-    document.querySelector('.sign-out').addEventListener('click', function(event) {
+    document.querySelector('.sign-out').addEventListener('click', function (event) {
       console.log('sign out clicked')
       firebase.auth().signOut()
       document.location.href = 'index.html'
@@ -22,7 +22,7 @@ firebase.auth().onAuthStateChanged(async function(user) {
 
 
     // Listen for the form submit and create/render the new post
-    document.querySelector('form').addEventListener('submit', async function(event) {
+    document.querySelector('form').addEventListener('submit', async function (event) {
       event.preventDefault()
       let postUsername = user.displayName
       let postImageUrl = document.querySelector('#image-url').value
@@ -51,37 +51,37 @@ firebase.auth().onAuthStateChanged(async function(user) {
       document.querySelector('#price').value = ""
       document.querySelector('#rating').value = ""
       renderPost(dish)
-    }) 
+    })
 
     //create blank array query that will have all restaurants 
     let restaurantQuery = []
 
     let response = await fetch('/.netlify/functions/get_dishes')
     let dishes = await response.json()
-    for (let i=0; i<dishes.length; i++) {
+    for (let i = 0; i < dishes.length; i++) {
       let dish = dishes[i]
       renderPost(dish)
-      
+
       //creates query of all restaurants to create filter buttons
       let restaurant = dish.restaurant
-      if (restaurantQuery.indexOf(restaurant) < 0){
+      if (restaurantQuery.indexOf(restaurant) < 0) {
         restaurantQuery.push(restaurant)
-      }    
+      }
     }
 
     //restaurant buttons
     let restaurant = ''
     let numRestaurants = restaurantQuery.length
     restaurantQuery.sort()
-    for (let i=0; i<numRestaurants; i++) {
+    for (let i = 0; i < numRestaurants; i++) {
       renderRestaurant(restaurantQuery[i])
     }
     let restaurants = document.querySelectorAll('.restaurant')
 
     // console.log(numRestaurants)
 
-    for (let i=0; i<numRestaurants; i++) {
-      restaurants[i].addEventListener('click', async function(event) {
+    for (let i = 0; i < numRestaurants; i++) {
+      restaurants[i].addEventListener('click', async function (event) {
         event.preventDefault()
         restaurant = restaurants[i].innerHTML
         console.log(`${restaurant} clicked`)
@@ -96,16 +96,24 @@ firebase.auth().onAuthStateChanged(async function(user) {
         //render posts for only dishes that are part of restaurant clicked
         let response = await fetch('/.netlify/functions/get_dishes')
         let dishes = await response.json()
-        for (let i=0; i<dishes.length; i++) {
+        for (let i = 0; i < dishes.length; i++) {
           let dish = dishes[i]
-          if(dish.restaurant == restaurant){
-            renderPost(dish)  
-          }     
+          if (dish.restaurant == restaurant) {
+            renderPost(dish)
+          }
         }
       })
     }
+    document.querySelector('.submissions').insertAdjacentHTML('beforeend',`<input type="text" id="restaurant" name="restaurant" placeholder="Restaurant" class="my-2 p-2 w-64 border border-gray-400 rounded shadow-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500"> <br />
+    <input type="text" id="dish" name="dish" placeholder="Dish" class="my-2 p-2 w-64 border border-gray-400 rounded shadow-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500"> <br />
+    <input type="text" id="image-url" name="image-url" placeholder="Image URL" class="my-2 p-2 w-64 border border-gray-400 rounded shadow-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500"> <br />
+    <input type="number" id="rating" name="rating" placeholder="Rating" min = "0" max = "10" step = "0.5" class="my-2 p-2 w-32 border border-gray-400 rounded shadow-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+    <input type="number" id="price" name="price" placeholder="Price" min = "0" step = "0.01" class="my-2 p-2 w-32 border border-gray-400 rounded shadow-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500"> <br />
+    <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl">Post</button>`)
   
   } else {
+
+    
     // Signed out
     console.log('signed out')
 
@@ -122,6 +130,59 @@ firebase.auth().onAuthStateChanged(async function(user) {
 
     // Starts FirebaseUI Auth
     ui.start('.sign-in', authUIConfig)
+
+        //create blank array query that will have all restaurants 
+        let restaurantQuery = []
+
+        let response = await fetch('/.netlify/functions/get_dishes')
+        let dishes = await response.json()
+        for (let i = 0; i < dishes.length; i++) {
+          let dish = dishes[i]
+          renderPost(dish)
+    
+          //creates query of all restaurants to create filter buttons
+          let restaurant = dish.restaurant
+          if (restaurantQuery.indexOf(restaurant) < 0) {
+            restaurantQuery.push(restaurant)
+          }
+        }
+    
+        //restaurant buttons
+        let restaurant = ''
+        let numRestaurants = restaurantQuery.length
+        restaurantQuery.sort()
+        for (let i = 0; i < numRestaurants; i++) {
+          renderRestaurant(restaurantQuery[i])
+        }
+        let restaurants = document.querySelectorAll('.restaurant')
+
+        
+    
+        // console.log(numRestaurants)
+    
+        for (let i = 0; i < numRestaurants; i++) {
+          restaurants[i].addEventListener('click', async function (event) {
+            event.preventDefault()
+            restaurant = restaurants[i].innerHTML
+            console.log(`${restaurant} clicked`)
+    
+            //clear all previous rendered posts
+    
+            const item = document.querySelector('.dishes')
+            while (item.firstChild) {
+              item.removeChild(item.firstChild)
+            }
+    
+            //render posts for only dishes that are part of restaurant clicked
+            let response = await fetch('/.netlify/functions/get_dishes')
+            let dishes = await response.json()
+            for (let i = 0; i < dishes.length; i++) {
+              let dish = dishes[i]
+              if (dish.restaurant == restaurant) {
+                renderPost(dish)
+              }
+            }
+          })}
   }
 })
 
@@ -154,8 +215,9 @@ async function renderPost(dish) {
       </div>
   `)
 
+
   let likeButton = document.querySelector(`.dish-${dishId} .like-button`)
-  likeButton.addEventListener('click', async function(event) {  
+  likeButton.addEventListener('click', async function (event) {
     event.preventDefault()
     console.log(`dish ${dishId} like button clicked!`)
     let currentUserId = firebase.auth().currentUser.uid
@@ -172,5 +234,5 @@ async function renderPost(dish) {
       let newNumberOfLikes = parseInt(existingNumberOfLikes) + 1
       document.querySelector(`.dish-${dishId} .likes`).innerHTML = newNumberOfLikes
     }
-  }) 
+  })
 }
